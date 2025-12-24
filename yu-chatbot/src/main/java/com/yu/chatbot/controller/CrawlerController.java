@@ -26,10 +26,8 @@ public class CrawlerController {
 
         int maxDepth = request.getMaxDepth() > 0 ? request.getMaxDepth() : 3;
 
-        // FIX: Generate the Job ID here synchronously
         String jobId = UUID.randomUUID().toString();
 
-        // FIX: Call the service with the ID (method is now void)
         crawlerService.startCrawling(request.getUrl(), maxDepth, jobId);
 
         Map<String, Object> response = new HashMap<>();

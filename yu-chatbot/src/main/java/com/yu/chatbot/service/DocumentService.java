@@ -16,13 +16,11 @@ public class DocumentService {
 
     private final DocumentRepository documentRepository;
 
-    // CREATE
     public WebDocument save(WebDocument document) {
         log.info("Saving document: {}", document.getUrl());
         return documentRepository.save(document);
     }
 
-    // READ
     public List<WebDocument> findAll() {
         return documentRepository.findAll();
     }
@@ -35,7 +33,6 @@ public class DocumentService {
         return documentRepository.findByUrl(url);
     }
 
-    // SEARCH - uses regex search in content
     public List<WebDocument> searchByKeyword(String keyword) {
         log.info("Searching for keyword: {}", keyword);
         return documentRepository.searchByKeyword(keyword);
@@ -49,7 +46,6 @@ public class DocumentService {
         return documentRepository.findByFileType(fileType);
     }
 
-    // UPDATE
     public WebDocument update(String id, WebDocument updatedDocument) {
         return documentRepository.findById(id)
                 .map(existing -> {
@@ -61,7 +57,6 @@ public class DocumentService {
                 .orElseThrow(() -> new RuntimeException("Document not found: " + id));
     }
 
-    // DELETE
     public void deleteById(String id) {
         log.info("Deleting document: {}", id);
         documentRepository.deleteById(id);
@@ -72,7 +67,6 @@ public class DocumentService {
         documentRepository.deleteAll();
     }
 
-    // STATISTICS
     public long count() {
         return documentRepository.count();
     }

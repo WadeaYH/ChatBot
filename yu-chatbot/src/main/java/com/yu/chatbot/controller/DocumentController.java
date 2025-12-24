@@ -17,31 +17,21 @@ import java.util.Map;
 public class DocumentController {
     
     private final DocumentService documentService;
-    
-    // ==================== GET ====================
-    
-    /**
-     * GET /api/documents - Get all documents
-     */
+
     @GetMapping
     public ResponseEntity<List<WebDocument>> getAllDocuments() {
         List<WebDocument> documents = documentService.findAll();
         return ResponseEntity.ok(documents);
     }
     
-    /**
-     * GET /api/documents/{id} - Get by ID
-     */
+
     @GetMapping("/{id}")
     public ResponseEntity<WebDocument> getDocumentById(@PathVariable String id) {
         return documentService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
-    /**
-     * GET /api/documents/search?q=keyword - Search with citation
-     */
+
     @GetMapping("/search")
     public ResponseEntity<Map<String, Object>> searchDocuments(@RequestParam("q") String keyword) {
         List<WebDocument> results = documentService.searchByKeyword(keyword);
@@ -53,29 +43,20 @@ public class DocumentController {
         
         return ResponseEntity.ok(response);
     }
-    
-    /**
-     * GET /api/documents/url?url=... - Get by URL (citation)
-     */
+
     @GetMapping("/url")
     public ResponseEntity<WebDocument> getDocumentByUrl(@RequestParam String url) {
         return documentService.findByUrl(url)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
-    /**
-     * GET /api/documents/type/{fileType} - Get by file type
-     */
+
     @GetMapping("/type/{fileType}")
     public ResponseEntity<List<WebDocument>> getDocumentsByType(@PathVariable String fileType) {
         List<WebDocument> documents = documentService.findByFileType(fileType.toUpperCase());
         return ResponseEntity.ok(documents);
     }
-    
-    /**
-     * GET /api/documents/stats - Get statistics
-     */
+
     @GetMapping("/stats")
     public ResponseEntity<Map<String, Object>> getStatistics() {
         Map<String, Object> stats = new HashMap<>();
@@ -85,23 +66,13 @@ public class DocumentController {
         stats.put("wordFiles", documentService.countByFileType("DOCX"));
         return ResponseEntity.ok(stats);
     }
-    
-    // ==================== POST ====================
-    
-    /**
-     * POST /api/documents - Create new document
-     */
+
     @PostMapping
     public ResponseEntity<WebDocument> createDocument(@RequestBody WebDocument document) {
         WebDocument saved = documentService.save(document);
         return ResponseEntity.ok(saved);
     }
-    
-    // ==================== PUT ====================
-    
-    /**
-     * PUT /api/documents/{id} - Update document
-     */
+
     @PutMapping("/{id}")
     public ResponseEntity<WebDocument> updateDocument(
             @PathVariable String id,
@@ -113,12 +84,7 @@ public class DocumentController {
             return ResponseEntity.notFound().build();
         }
     }
-    
-    // ==================== DELETE ====================
-    
-    /**
-     * DELETE /api/documents/{id} - Delete document
-     */
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, Object>> deleteDocument(@PathVariable String id) {
         documentService.deleteById(id);
@@ -129,10 +95,7 @@ public class DocumentController {
         
         return ResponseEntity.ok(response);
     }
-    
-    /**
-     * DELETE /api/documents/all - Delete all
-     */
+
     @DeleteMapping("/all")
     public ResponseEntity<Map<String, Object>> deleteAllDocuments() {
         long count = documentService.count();

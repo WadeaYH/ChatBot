@@ -19,15 +19,12 @@ public interface DocumentRepository extends MongoRepository<WebDocument, String>
 
     List<WebDocument> findByStatus(String status);
 
-    // Search by content using regex (case-insensitive)
     @Query("{ 'content': { $regex: ?0, $options: 'i' } }")
     List<WebDocument> findByContentContaining(String keyword);
 
-    // Search by title using regex
     @Query("{ 'title': { $regex: ?0, $options: 'i' } }")
     List<WebDocument> findByTitleContaining(String keyword);
 
-    // Search in both title and content
     @Query("{ $or: [ { 'content': { $regex: ?0, $options: 'i' } }, { 'title': { $regex: ?0, $options: 'i' } } ] }")
     List<WebDocument> searchByKeyword(String keyword);
 
