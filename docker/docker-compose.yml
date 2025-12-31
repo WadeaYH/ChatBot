@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: yu_postgres
+    environment:
+      POSTGRES_DB: yu_chatbot
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - yu_pg_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo:7
+    container_name: yu_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - yu_mongo_data:/data/db
+
+  backend:
+    build: .
+    container_name: yu_backend
+    depends_on:
+      - postgres
+      - mongo
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/yu_chatbot
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/yu_chatbot
+
+      APP_JWT_SECRET: CHANGE_THIS_TO_A_LONG_RANDOM_32+_CHARS_SECRET_KEY
+      APP_CORS_ORIGINS: http://localhost:3000
+
+      # SIS (prod)
+      APP_SIS_MODE: mock
+
+volumes:
+  yu_pg_data:
+  yu_mongo_data:
